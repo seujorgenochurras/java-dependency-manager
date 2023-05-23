@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.mapper.gradlew.validator;
+package io.github.seujorgenochurras.mapper.gradlew.validate;
 
 import java.util.ArrayList;
 

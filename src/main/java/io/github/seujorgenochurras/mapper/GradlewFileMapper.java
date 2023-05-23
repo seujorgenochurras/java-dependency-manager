@@ -1,13 +1,12 @@
 package io.github.seujorgenochurras.mapper;
 
 import io.github.seujorgenochurras.domain.GradlewBuildFile;
-import io.github.seujorgenochurras.mapper.gradlew.validator.GradleValidatorChain;
-import io.github.seujorgenochurras.mapper.gradlew.validator.string.*;
+import io.github.seujorgenochurras.mapper.gradlew.validate.GradleValidatorChain;
+import io.github.seujorgenochurras.mapper.gradlew.validate.string.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class GradlewFileMapper {
 
@@ -16,22 +15,52 @@ public class GradlewFileMapper {
 
       Scanner scanner = new Scanner(file);
 
-      while (scanner.hasNext()) {
-         fileAsString.append(scanner.next());
+      while (scanner.hasNextLine()) {
+         fileAsString.append(scanner.nextLine());
       }
       System.out.println(getDependenciesString(fileAsString.toString()));
-
       return new GradlewBuildFile();
    }
 
-   private String getDependenciesString(String rawFile) {
-      String[] dependenciesPlace = rawFile.split("dependencies")[1].split(" ");
+   private ArrayList<String> getValidDependenciesOf(String[] dependenciesDeclarationsToCheck) {
 
-      int curlyBracesCount = -1;
+      ArrayList<String> dependenciesDeclarations = new ArrayList<>();
+
+      for (String probableDependency : dependenciesDeclarationsToCheck) {
+         if (isStringImplementation(probableDependency)) {
+            dependenciesDeclarations.add(probableDependency);
+         }
+      }
+
+      return dependenciesDeclarations;
+   }
+
+   public String getDependenciesString(String rawFile) {
+      String dependenciesPlace = rawFile.split("dependencies")[1];
+
+      int openCurlyBracesCount = -1;
       boolean isFirstCurlyBrace = true;
-      String[] result = dependenciesPlace.toString().split(" ");
+      String result = "";
+      for (char letter : dependenciesPlace.toCharArray()) {
 
-
+         if(openCurlyBracesCount == 0) break;
+         if(letter == '{'){
+            if(isFirstCurlyBrace){
+               openCurlyBracesCount++;
+               isFirstCurlyBrace = false;
+            }
+            openCurlyBracesCount++;
+            continue;
+         }else if(letter == '}'){
+            openCurlyBracesCount--;
+            continue;
+         }
+         result += letter;
+      }
+      System.out.println(getPossibleDependenciesImplementations(result));
+      return "";
+   }
+   private boolean isStringImplementation(String possibleImplementationString){
       GradleValidatorChain<String> dependencyDeclarationValidator = GradleValidatorChain
               .startValidationChainOf(String.class)
               .addValidator(new ValidateStringNotBlank())
@@ -40,36 +69,15 @@ public class GradlewFileMapper {
               .addValidator(new ValidateStringContainsDependencyGroup())
               .addValidator(new ValidateStringContainsDependencyArtifact());
 
-      ArrayList<String> dependenciesDeclarations = new ArrayList<>();
+      return dependencyDeclarationValidator.validate(possibleImplementationString);
+   }
+   private List<String> getPossibleDependenciesImplementations(String junk){
+      List<String> possibleDependencies = new ArrayList<>();
 
-      for (String probableDependency : result) {
-         if (dependencyDeclarationValidator.validate(probableDependency)) {
-            dependenciesDeclarations.add(probableDependency);
-         }
+      int minImplementationLength = 24; //It could be even higher, but who knows
+      for (String s : junk.split("(?= [tiRIrCaTcA])")) {
+         if(s.length() > minImplementationLength) possibleDependencies.add(s.replaceAll("\\/\\/|\\/\\*| \\*\\/", "").trim());
       }
-
-//      for(char letter : dependenciesPlace.toString().toCharArray()){
-//         if(curlyBracesCount == 0) {
-//            break;
-//         }
-//         if(letter == '{') {
-//            if(isFirstCurlyBrace) {
-//               curlyBracesCount++;
-//               isFirstCurlyBrace = false;
-//            }
-//            curlyBracesCount++;
-//            continue;
-//         }
-//         else if(letter == '}'){
-//            curlyBracesCount--;
-//            continue;
-//         }
-//            result.append(letter);
-//
-//      }
-//      return result.toString();
-//   }
-      return "";
-
+      return possibleDependencies;
    }
 }

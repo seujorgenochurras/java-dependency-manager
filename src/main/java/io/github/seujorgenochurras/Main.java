@@ -1,6 +1,5 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.domain.GradlewBuildFile;
 import io.github.seujorgenochurras.mapper.GradlewFileMapper;
 
 import java.io.File;

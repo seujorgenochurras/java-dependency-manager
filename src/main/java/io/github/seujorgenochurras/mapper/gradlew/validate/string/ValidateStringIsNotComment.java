@@ -1,6 +1,6 @@
-package io.github.seujorgenochurras.mapper.gradlew.validator.string;
+package io.github.seujorgenochurras.mapper.gradlew.validate.string;
 
-import io.github.seujorgenochurras.mapper.gradlew.validator.GradlewMapperValidator;
+import io.github.seujorgenochurras.mapper.gradlew.validate.GradlewMapperValidator;
 
 public class ValidateStringIsNotComment implements GradlewMapperValidator<String> {
    @Override
