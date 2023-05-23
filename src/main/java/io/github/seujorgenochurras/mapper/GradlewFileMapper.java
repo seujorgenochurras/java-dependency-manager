@@ -1,7 +1,8 @@
 package io.github.seujorgenochurras.mapper;
 
 import io.github.seujorgenochurras.domain.GradlewBuildFile;
-import io.github.seujorgenochurras.mapper.gradlew.GradlewMapperChain;
+import io.github.seujorgenochurras.mapper.gradlew.validator.GradleValidatorChain;
+import io.github.seujorgenochurras.mapper.gradlew.validator.string.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,7 +24,7 @@ public class GradlewFileMapper {
       return new GradlewBuildFile();
    }
 
-   private String getDependenciesString(String rawFile){
+   private String getDependenciesString(String rawFile) {
       String[] dependenciesPlace = rawFile.split("dependencies")[1].split(" ");
 
       int curlyBracesCount = -1;
@@ -31,42 +32,44 @@ public class GradlewFileMapper {
       String[] result = dependenciesPlace.toString().split(" ");
 
 
-      GradlewMapperValidationChain validationChain = GradlewMapperValidationChain
-              .startChain()
+      GradleValidatorChain<String> dependencyDeclarationValidator = GradleValidatorChain
+              .startValidationChainOf(String.class)
               .addValidator(new ValidateStringNotBlank())
               .addValidator(new ValidateStringIsNotComment())
-              .addValidator(new ValidateStringStartsWithDependencyDeclarator());
+              .addValidator(new ValidateStringStartsWithDependencyType())
+              .addValidator(new ValidateStringContainsDependencyGroup())
+              .addValidator(new ValidateStringContainsDependencyArtifact());
 
-      ArrayList<String> dependencies = new ArrayList<>();
+      ArrayList<String> dependenciesDeclarations = new ArrayList<>();
 
-      for(String probableDependency : result){
-
-            dependencies.add(probableDependency);
+      for (String probableDependency : result) {
+         if (dependencyDeclarationValidator.validate(probableDependency)) {
+            dependenciesDeclarations.add(probableDependency);
          }
-
       }
 
+//      for(char letter : dependenciesPlace.toString().toCharArray()){
+//         if(curlyBracesCount == 0) {
+//            break;
+//         }
+//         if(letter == '{') {
+//            if(isFirstCurlyBrace) {
+//               curlyBracesCount++;
+//               isFirstCurlyBrace = false;
+//            }
+//            curlyBracesCount++;
+//            continue;
+//         }
+//         else if(letter == '}'){
+//            curlyBracesCount--;
+//            continue;
+//         }
+//            result.append(letter);
+//
+//      }
+//      return result.toString();
+//   }
+      return "";
 
-
-      for(char letter : dependenciesPlace.toString().toCharArray()){
-         if(curlyBracesCount == 0) {
-            break;
-         }
-         if(letter == '{') {
-            if(isFirstCurlyBrace) {
-               curlyBracesCount++;
-               isFirstCurlyBrace = false;
-            }
-            curlyBracesCount++;
-            continue;
-         }
-         else if(letter == '}'){
-            curlyBracesCount--;
-            continue;
-         }
-            result.append(letter);
-
-      }
-      return result.toString();
    }
 }
