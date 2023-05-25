@@ -1,6 +1,8 @@
 package io.github.seujorgenochurras.mapper;
 
 import io.github.seujorgenochurras.domain.GradlewBuildFile;
+import io.github.seujorgenochurras.mapper.gradlew.clean.GradlewStringCollectionCleaner;
+import io.github.seujorgenochurras.mapper.gradlew.clean.ImplementationStringCleaner;
 import io.github.seujorgenochurras.mapper.gradlew.validate.GradleValidatorChain;
 import io.github.seujorgenochurras.mapper.gradlew.validate.string.*;
 
@@ -11,14 +13,19 @@ import java.util.*;
 public class GradlewFileMapper {
 
    public GradlewBuildFile mapFile(File file) throws FileNotFoundException {
-      StringBuilder fileAsString = new StringBuilder();
-
+      List<String> buildGradlewLines = new ArrayList<>();
       Scanner scanner = new Scanner(file);
 
       while (scanner.hasNextLine()) {
-         fileAsString.append(scanner.nextLine());
+         buildGradlewLines.add(scanner.nextLine());
+
       }
-      System.out.println(getDependenciesString(fileAsString.toString()));
+      buildGradlewLines = GradlewStringCollectionCleaner
+              .startCleaning(buildGradlewLines)
+              .removeComments()
+              .trim()
+              .getCleanList();
+
       return new GradlewBuildFile();
    }
 
@@ -35,7 +42,7 @@ public class GradlewFileMapper {
       return dependenciesDeclarations;
    }
 
-   public String getDependenciesString(String rawFile) {
+   public String getDependenciesFunctionFromString(String rawFile) {
       String dependenciesPlace = rawFile.split("dependencies")[1];
 
       int openCurlyBracesCount = -1;
@@ -58,7 +65,7 @@ public class GradlewFileMapper {
          result += letter;
       }
       System.out.println(getPossibleDependenciesImplementations(result));
-      return "";
+      return result;
    }
    private boolean isStringImplementation(String possibleImplementationString){
       GradleValidatorChain<String> dependencyDeclarationValidator = GradleValidatorChain
@@ -71,12 +78,13 @@ public class GradlewFileMapper {
 
       return dependencyDeclarationValidator.validate(possibleImplementationString);
    }
+
    private List<String> getPossibleDependenciesImplementations(String junk){
       List<String> possibleDependencies = new ArrayList<>();
 
       int minImplementationLength = 24; //It could be even higher, but who knows
       for (String s : junk.split("(?= [tiRIrCaTcA])")) {
-         if(s.length() > minImplementationLength) possibleDependencies.add(s.replaceAll("\\/\\/|\\/\\*| \\*\\/", "").trim());
+         if(s.length() > minImplementationLength) possibleDependencies.add(s.replaceAll("\\/\\/|\\/\\*|\\*\\/", "").trim());
       }
       return possibleDependencies;
    }
