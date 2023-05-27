@@ -16,9 +16,12 @@ public class GradlewFileMapper {
 
    private GradleDependencies dependencies = new GradleDependencies();
 
+   private final File gradleOriginFile;
+
 
    private GradlewFileMapper(File gradleBuildFile) {
       this.gradleBuildFileAsString = FileUtils.getFileAsString(gradleBuildFile);
+      this.gradleOriginFile = gradleBuildFile;
    }
 
 
@@ -67,6 +70,7 @@ public class GradlewFileMapper {
 
    public GradlewBuildFile buildFile() {
       return new GradlewBuildFile()
+              .setOriginFile(gradleOriginFile)
               .setDependencies(dependencies)
               .setPlugins(gradlePlugins);
    }
@@ -84,6 +88,7 @@ public class GradlewFileMapper {
 
          String declarationWithoutStringSyntax = getStringOfMatcher(declarationSyntaxMatcher);
          String[] declarationComponents = declarationWithoutStringSyntax.split(":");
+
          int groupNameIndex = 0;
          int artifactIndex = 1;
          int versionIndex = 2;
@@ -92,7 +97,7 @@ public class GradlewFileMapper {
 
          String version = declarationComponents.length == 3 ? declarationComponents[versionIndex] : "";
 
-         dependenciesFound.addDependency(new GradleDependency()
+         dependenciesFound.add(new GradleDependency()
                  .setGroupName(groupName)
                  .setArtifact(artifact)
                  .setVersion(version));

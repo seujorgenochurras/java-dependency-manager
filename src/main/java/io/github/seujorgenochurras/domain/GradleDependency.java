@@ -5,7 +5,18 @@ public class GradleDependency {
    private String artifact;
    private String version;
 
+   private DependencyType dependencyType;
    public GradleDependency() {
+   }
+
+
+   public DependencyType getDependencyType() {
+      return dependencyType;
+   }
+
+   public GradleDependency setDependencyType(DependencyType dependencyType) {
+      this.dependencyType = dependencyType;
+      return this;
    }
 
    public String getGroupName() {

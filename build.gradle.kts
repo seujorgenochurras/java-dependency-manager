@@ -13,7 +13,8 @@ repositories {
     mavenCentral()
 }
 
-dependencies { //MEU PAU N OSEU CU
+dependencies {
+
     testImplementation ("org.junit.jupiter:junit-piter-api:5.8.1")
          testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
