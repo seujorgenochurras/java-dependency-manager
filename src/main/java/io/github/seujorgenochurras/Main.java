@@ -1,22 +1,21 @@
 package io.github.seujorgenochurras;
 
+import io.github.seujorgenochurras.domain.DependencyManagerFile;
+import io.github.seujorgenochurras.domain.DependencyType;
 import io.github.seujorgenochurras.domain.GradleDependency;
-import io.github.seujorgenochurras.domain.GradlewBuildFile;
-import io.github.seujorgenochurras.mapper.gradlew.mapper.GradlewFileMapper;
-
-import java.io.File;
+import io.github.seujorgenochurras.manager.DependencyManager;
 
 public class Main {
-
    public static void main(String[] args) {
-      File gradlewFile = new File("build.gradle.kts");
-      GradlewBuildFile buildFile = GradlewFileMapper.mapFile(gradlewFile);
-
-      buildFile.addDependency(new GradleDependency()
-              .setGroupName("com.google.code.gson")
+      GradleDependency gsonDependency = new GradleDependency();
+      gsonDependency
               .setArtifact("gson")
-              .setVersion("2.10.1"));
+              .setGroupName("com.google")
+              .setVersion("1.2.3")
+              .setDependencyType(DependencyType.RUNTIME_ONLY);
 
 
+      DependencyManagerFile dependencyManagerFile = DependencyManager.getDependencyManagerFile();
+      dependencyManagerFile.addDependency(gsonDependency);
    }
 }
