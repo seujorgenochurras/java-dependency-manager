@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.mapper.gradlew.mapper;
+package io.github.seujorgenochurras.mapper.gradlew;
 
 import io.github.seujorgenochurras.domain.*;
 import io.github.seujorgenochurras.utils.FileUtils;

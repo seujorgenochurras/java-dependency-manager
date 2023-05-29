@@ -4,6 +4,8 @@ import io.github.seujorgenochurras.domain.DependencyManagerFile;
 import io.github.seujorgenochurras.domain.GradleDependency;
 import io.github.seujorgenochurras.file.DependencyFileNotFoundException;
 import io.github.seujorgenochurras.file.FileSearcher;
+import io.github.seujorgenochurras.mapper.DependencyFileMapper;
+import io.github.seujorgenochurras.mapper.DependencyMapper;
 
 import java.io.File;
 
