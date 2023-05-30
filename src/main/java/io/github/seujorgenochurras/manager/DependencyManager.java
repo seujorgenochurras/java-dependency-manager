@@ -1,11 +1,10 @@
 package io.github.seujorgenochurras.manager;
 
-import io.github.seujorgenochurras.domain.DependencyManagerFile;
-import io.github.seujorgenochurras.domain.GradleDependency;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
+import io.github.seujorgenochurras.domain.Dependency;
 import io.github.seujorgenochurras.file.DependencyFileNotFoundException;
 import io.github.seujorgenochurras.file.FileSearcher;
 import io.github.seujorgenochurras.mapper.DependencyFileMapper;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
 
 import java.io.File;
 
@@ -20,7 +19,7 @@ public class DependencyManager {
       dependencyManagerFile = DependencyFileMapper.mapFile(dependencyManagerRootFile);
    }
 
-   public static void addDependency(GradleDependency dependency){
+   public static void addDependency(Dependency dependency){
       dependencyManagerFile.addDependency(dependency);
    }
 

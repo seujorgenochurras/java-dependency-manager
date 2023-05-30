@@ -97,7 +97,7 @@ public class GradlewFileMapper {
 
          String version = declarationComponents.length == 3 ? declarationComponents[versionIndex] : "";
 
-         dependenciesFound.add(new GradleDependency()
+         dependenciesFound.add(new Dependency()
                  .setGroupName(groupName)
                  .setArtifact(artifact)
                  .setVersion(version));

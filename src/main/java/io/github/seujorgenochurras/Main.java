@@ -1,11 +1,11 @@
 package io.github.seujorgenochurras;
 
+import io.github.seujorgenochurras.domain.Dependency;
 import io.github.seujorgenochurras.domain.DependencyType;
-import io.github.seujorgenochurras.domain.GradleDependency;
 
 public class Main {
    public static void main(String[] args) {
-      GradleDependency gsonDependency = new GradleDependency();
+      Dependency gsonDependency = new Dependency();
       gsonDependency
               .setArtifact("gson")
               .setGroupName("com.google")

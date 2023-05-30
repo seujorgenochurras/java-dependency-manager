@@ -1,11 +1,10 @@
 package io.github.seujorgenochurras.mapper.gradlew;
 
-import io.github.seujorgenochurras.domain.DependencyManagerFile;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 
 import java.io.File;
 
-public class GradleKotlinMapper extends DependencyMapper {
+public class GradleKotlinMapper extends Gradle {
 
 
    public GradleKotlinMapper(File rootFile) {
@@ -15,7 +14,7 @@ public class GradleKotlinMapper extends DependencyMapper {
    @Override
    protected DependencyManagerFile map() {
 
-      return null;
+      return this;
    }
 
    @Override
@@ -27,4 +26,7 @@ public class GradleKotlinMapper extends DependencyMapper {
    protected void mapPlugins() {
 
    }
+
+
+
 }

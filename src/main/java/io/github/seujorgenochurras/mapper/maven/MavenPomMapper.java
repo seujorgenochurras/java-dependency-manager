@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.mapper.maven;
 
-import io.github.seujorgenochurras.domain.DependencyManagerFile;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
 
 import java.io.File;
@@ -12,9 +12,9 @@ public class MavenPomMapper extends DependencyMapper {
 
    @Override
    protected DependencyManagerFile map() {
-
-      return null;
+      return this;
    }
+
 
    @Override
    protected void mapDependencies() {

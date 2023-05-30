@@ -1,11 +1,11 @@
 package io.github.seujorgenochurras.mapper.gradlew;
 
-import io.github.seujorgenochurras.domain.DependencyManagerFile;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
+
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 
 import java.io.File;
 
-public class GradleGroovyMapper extends DependencyMapper {
+public class GradleGroovyMapper extends Gradle {
    public GradleGroovyMapper(File rootFile) {
       super(rootFile);
    }

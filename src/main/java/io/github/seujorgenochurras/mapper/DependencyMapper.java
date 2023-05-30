@@ -1,16 +1,23 @@
 package io.github.seujorgenochurras.mapper;
 
-import io.github.seujorgenochurras.domain.DependencyManagerFile;
+import io.github.seujorgenochurras.domain.Dependency;
+import io.github.seujorgenochurras.domain.Plugin;
 import io.github.seujorgenochurras.mapper.gradlew.GradleGroovyMapper;
 import io.github.seujorgenochurras.mapper.gradlew.GradleKotlinMapper;
 import io.github.seujorgenochurras.mapper.maven.MavenPomMapper;
 
 import java.io.File;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public abstract class DependencyMapper {
 
-   private final File rootFile;
+   protected final File rootFile;
+
+   protected List<Dependency> dependencies;
+
+   protected List<Plugin> plugins;
+
 
    protected DependencyMapper(File rootFile) {
       this.rootFile = rootFile;
@@ -31,7 +38,6 @@ public abstract class DependencyMapper {
          case "maven.pom" -> {
             return new MavenPomMapper(file);
          }
-
          default -> throw new NoSuchElementException("Dependency file not found");
       }
    }

@@ -1,12 +1,12 @@
 package io.github.seujorgenochurras.domain;
 
-public class GradleDependency {
+public class Dependency {
    private String groupName;
    private String artifact;
    private String version;
 
    private DependencyType dependencyType;
-   public GradleDependency() {
+   public Dependency() {
    }
 
 
@@ -14,7 +14,7 @@ public class GradleDependency {
       return dependencyType;
    }
 
-   public GradleDependency setDependencyType(DependencyType dependencyType) {
+   public Dependency setDependencyType(DependencyType dependencyType) {
       this.dependencyType = dependencyType;
       return this;
    }
@@ -33,24 +33,24 @@ public class GradleDependency {
       return version;
    }
 
-   public GradleDependency setGroupName(String groupName) {
+   public Dependency setGroupName(String groupName) {
       this.groupName = groupName;
       return this;
    }
 
-   public GradleDependency setArtifact(String artifact) {
+   public Dependency setArtifact(String artifact) {
       this.artifact = artifact;
       return this;
    }
 
-   public GradleDependency setVersion(String version) {
+   public Dependency setVersion(String version) {
       this.version = version;
       return this;
    }
 
    @Override
    public String toString() {
-      return "GradleDependency{" +
+      return "Dependency{" +
               "groupName='" + groupName + '\'' +
               ", artifact='" + artifact + '\'' +
               ", version='" + version + '\'' +

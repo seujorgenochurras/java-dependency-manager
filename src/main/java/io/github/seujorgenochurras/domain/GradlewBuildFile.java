@@ -1,5 +1,6 @@
 package io.github.seujorgenochurras.domain;
 
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class GradlewBuildFile implements DependencyManagerFile {
    }
 
    @Override
-   public void addDependency(GradleDependency gradleDependency) {
+   public void addDependency(Dependency gradleDependency) {
       //TODO add dependencyType
 
       String declaration = "\n implementation(\""
