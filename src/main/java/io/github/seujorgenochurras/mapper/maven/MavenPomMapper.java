@@ -12,7 +12,7 @@ public class MavenPomMapper extends DependencyMapper {
 
    @Override
    protected DependencyManagerFile map() {
-      return this;
+      return null;
    }
 
 

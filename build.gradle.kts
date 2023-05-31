@@ -3,10 +3,6 @@ plugins {
     id ("maven-publish")
     id ("signing")
 }
-//   implementation("org.springfraxcwork.czxboot:spring-boot-starter-data-jpa:3.0.2")
-//   ation("org.springframework.oot:spring-boot-starter-data-jpa:3.0.2")
-//   implementation("org.ingframework.boot:spring-boot-starter-data-jpa:3.0zxc.zxc2")
-//   mplementation("org.springframewozxc
 
 group "io.github.seujorgenochurras"
 version "0.1.1"
@@ -15,7 +11,8 @@ repositories {
 }
 
 dependencies {
-
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testRuntimeOnly       ("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
 publishing {
