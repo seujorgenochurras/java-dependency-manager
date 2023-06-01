@@ -1,16 +1,16 @@
 package io.github.seujorgenochurras.mapper;
 
-import io.github.seujorgenochurras.domain.Dependency;
-import io.github.seujorgenochurras.domain.Plugin;
+import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.dependency.Dependency;
 
 import java.util.List;
 
 public interface DependencyManagerFile {
-   void addDependency(Dependency gradleDependency);
+   void addDependency(Dependency dependency);
 
-   void addPlugin(Plugin plugin);
+   <T extends AbstractPlugin> void addPlugin(T plugin);
 
-   List<Plugin> getPlugins();
+   List<? extends AbstractPlugin> getPlugins();
 
    List<Dependency> getDependencies();
 

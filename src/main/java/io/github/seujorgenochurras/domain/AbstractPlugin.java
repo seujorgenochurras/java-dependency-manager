@@ -1,27 +1,27 @@
 package io.github.seujorgenochurras.domain;
 
-public class Plugin {
+public class AbstractPlugin {
    private String id;
 
-   public Plugin(String id) {
+   public AbstractPlugin(String id) {
       this.id = id;
    }
 
-   public Plugin() {
+   public AbstractPlugin() {
    }
 
    public String getId() {
       return id;
    }
 
-   public Plugin setId(String id) {
+   public AbstractPlugin setId(String id) {
       this.id = id;
       return this;
    }
 
    @Override
    public String toString() {
-      return "Plugin{" +
+      return "AbstractPlugin{" +
               "id='" + id + '\'' +
               '}';
    }

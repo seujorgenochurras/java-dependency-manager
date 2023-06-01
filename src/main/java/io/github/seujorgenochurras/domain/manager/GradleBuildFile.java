@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.domain.manager;
 
-import io.github.seujorgenochurras.domain.Dependency;
-import io.github.seujorgenochurras.domain.Plugin;
+import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.utils.FileUtils;
 
@@ -9,10 +9,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GradleBuildFile implements DependencyManagerFile {
    private List<Dependency> dependencies;
-   private List<Plugin> plugins;
+   private List< AbstractPlugin> plugins;
    private File originFile;
    private String originFileAsString;
    private FileWriter fileWriter;
@@ -24,12 +26,17 @@ public class GradleBuildFile implements DependencyManagerFile {
    }
 
    @Override
-   public List<Plugin> getPlugins() {
+   public List<? extends AbstractPlugin> getPlugins() {
       return plugins;
    }
 
-   public GradleBuildFile setPlugins(List<Plugin> plugins) {
+   public GradleBuildFile setPlugins(List<AbstractPlugin> plugins) {
       this.plugins = plugins;
+      return this;
+   }
+
+   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
+      this.dependencies = dependencies;
       return this;
    }
 
@@ -37,11 +44,10 @@ public class GradleBuildFile implements DependencyManagerFile {
       return originFile;
    }
 
-    GradleBuildFile setOriginFile(File originFile) {
+   public void setOriginFile(File originFile) {
       this.originFile = originFile;
       this.originFileAsString = FileUtils.getFileAsString(originFile);
-      return this;
-   }
+    }
 
    public FileWriter getFileWriter() {
       if (this.fileWriter == null) {
@@ -50,42 +56,35 @@ public class GradleBuildFile implements DependencyManagerFile {
       return fileWriter;
    }
 
-   private FileWriter tryInstantiateFileWriterFromFile(File file) {
-      try {
-         return new FileWriter(file);
-      } catch (IOException e) {
-         throw new IllegalStateException(e);
-      }
-   }
 
-   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
-      this.dependencies = dependencies;
-      return this;
-   }
 
    @Override
-   public void addDependency(Dependency gradleDependency) {
+   public void addDependency(Dependency dependency) {
       //TODO add dependencyType
 
-      String declaration = "\n implementation \""
-              + gradleDependency.getGroupName().trim()
+      String declaration = "implementation \""
+              + dependency.getGroupName().trim()
               + ":"
-              + gradleDependency.getArtifact().trim()
+              + dependency.getArtifact().trim()
               + ":"
-              + gradleDependency.getVersion().trim()
-              + "\"";
+              + dependency.getVersion().trim()
+              + "\"\n";
 
 
-      addTextToOriginFile(declaration, getIndexOfBlock("dependencies"));
+      getIndexOfStringWithRegex(originFileAsString);
+      addTextToOriginFile(declaration, getIndexOfBlock("dependencies") + 1);
       tryRewriteOriginFile();
+      this.dependencies.add(dependency);
    }
 
+
    @Override
-   public void addPlugin(Plugin plugin) {
-      String declaration = "\n id '" + plugin.getId().trim() + "'";
+   public <T extends AbstractPlugin> void addPlugin(T plugin) {
+      String declaration = "id '" + plugin.getId().trim() + "'\n";
 
       addTextToOriginFile(declaration, getIndexOfBlock("plugins"));
       tryRewriteOriginFile();
+      this.plugins.add(plugin);
    }
 
    private void addTextToOriginFile(String text, int indexOfWhereToWrite) {
@@ -105,6 +104,23 @@ public class GradleBuildFile implements DependencyManagerFile {
    private int getIndexOfBlock(String blockName){
       int dependenciesStringLength = blockName.length();
       return FileUtils.getFileAsString(originFile).lastIndexOf(blockName) + dependenciesStringLength;
+   }
+   private int getIndexOfStringWithRegex(String string){
+
+      System.out.println(string);
+      Matcher matcher = Pattern.compile("dependencies.*\\{").matcher(string);
+      System.out.println(matcher.find());
+      System.out.println(matcher.groupCount());
+
+      return 10;
+   }
+
+   private FileWriter tryInstantiateFileWriterFromFile(File file) {
+      try {
+         return new FileWriter(file);
+      } catch (IOException e) {
+         throw new IllegalStateException(e);
+      }
    }
 
 

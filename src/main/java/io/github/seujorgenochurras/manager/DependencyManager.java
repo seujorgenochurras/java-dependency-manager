@@ -1,8 +1,8 @@
 package io.github.seujorgenochurras.manager;
 
-import io.github.seujorgenochurras.domain.Plugin;
+import io.github.seujorgenochurras.domain.AbstractPlugin;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
-import io.github.seujorgenochurras.domain.Dependency;
+import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.file.DependencyFileNotFoundException;
 import io.github.seujorgenochurras.file.FileSearcher;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
@@ -23,7 +23,7 @@ public class DependencyManager {
    public static void addDependency(Dependency dependency){
       dependencyManagerFile.addDependency(dependency);
    }
-   public static void addPlugin(Plugin plugin){
+   public static void addPlugin(AbstractPlugin plugin){
       dependencyManagerFile.addPlugin(plugin);
    }
 
