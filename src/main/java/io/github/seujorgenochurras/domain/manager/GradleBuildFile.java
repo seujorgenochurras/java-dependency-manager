@@ -30,14 +30,12 @@ public class GradleBuildFile implements DependencyManagerFile {
       return plugins;
    }
 
-   public GradleBuildFile setPlugins(List<AbstractPlugin> plugins) {
+   public void setPlugins(List<AbstractPlugin> plugins) {
       this.plugins = plugins;
-      return this;
    }
 
-   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
+   public void setDependencies(List<Dependency> dependencies) {
       this.dependencies = dependencies;
-      return this;
    }
 
    public File getOriginFile() {
@@ -57,24 +55,21 @@ public class GradleBuildFile implements DependencyManagerFile {
    }
 
 
-
    @Override
    public void addDependency(Dependency dependency) {
-      //TODO add dependencyType
-
-      String declaration = "implementation \""
+      String declaration = "\n" + dependency.getDependencyType().typeName + " (\""
               + dependency.getGroupName().trim()
               + ":"
               + dependency.getArtifact().trim()
               + ":"
               + dependency.getVersion().trim()
-              + "\"\n";
+              + "\")";
 
 
-      getIndexOfStringWithRegex(originFileAsString);
-      addTextToOriginFile(declaration, getIndexOfBlock("dependencies") + 1);
+    int indexOfDependenciesBlock = getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
+      addTextToOriginFile(declaration, indexOfDependenciesBlock);
       tryRewriteOriginFile();
-      this.dependencies.add(dependency);
+     this.dependencies.add(dependency);
    }
 
 
@@ -82,7 +77,7 @@ public class GradleBuildFile implements DependencyManagerFile {
    public <T extends AbstractPlugin> void addPlugin(T plugin) {
       String declaration = "id '" + plugin.getId().trim() + "'\n";
 
-      addTextToOriginFile(declaration, getIndexOfBlock("plugins"));
+      addTextToOriginFile(declaration, getIndexOfStringWithRegex(originFileAsString, "plugins"));
       tryRewriteOriginFile();
       this.plugins.add(plugin);
    }
@@ -93,26 +88,18 @@ public class GradleBuildFile implements DependencyManagerFile {
    }
 
    private void tryRewriteOriginFile() {
-      try {
-         getFileWriter().write(originFileAsString);
-         getFileWriter().close();
+      try(FileWriter originFileWriter = getFileWriter()) {
+         originFileWriter.write(originFileAsString);
       } catch (IOException e) {
          throw new IllegalStateException(e);
       }
    }
 
-   private int getIndexOfBlock(String blockName){
-      int dependenciesStringLength = blockName.length();
-      return FileUtils.getFileAsString(originFile).lastIndexOf(blockName) + dependenciesStringLength;
-   }
-   private int getIndexOfStringWithRegex(String string){
+   private int getIndexOfStringWithRegex(String string, String regex){
 
-      System.out.println(string);
-      Matcher matcher = Pattern.compile("dependencies.*\\{").matcher(string);
-      System.out.println(matcher.find());
-      System.out.println(matcher.groupCount());
-
-      return 10;
+      Matcher matcher = Pattern.compile(regex).matcher(string);
+      matcher.find();
+      return matcher.end();
    }
 
    private FileWriter tryInstantiateFileWriterFromFile(File file) {

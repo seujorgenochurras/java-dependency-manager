@@ -7,7 +7,7 @@ public class Dependency {
    private String artifact;
    private String version;
 
-   private DependencyType dependencyType;
+   private DependencyType dependencyType = DependencyType.IMPLEMENTATION;
 
     Dependency() {
       //only by builder

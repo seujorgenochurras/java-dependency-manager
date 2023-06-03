@@ -3,21 +3,18 @@ package io.github.seujorgenochurras.mapper.gradlew.mapper;
 
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
+import io.github.seujorgenochurras.manager.DependencyManager;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GradleMapperTest {
-   private static final DependencyManagerFile buildFile;
-   static {
-      buildFile = DependencyMapper.mapFile(new File("build.gradle.kts"));
-   }
+   private static final DependencyManagerFile buildFile = DependencyManager.dependencyManagerFile;
+
 
    @Test
    void isMappingDependencies(){
@@ -39,11 +36,11 @@ class GradleMapperTest {
               .buildResult();
       buildFile.addDependency(dependency);
 
-      assertTrue(buildFile.getDependencies().contains(dependency));
+      assertTrue(listContains(buildFile.getDependencies(), dependency));
    }
 
    private <T> boolean listContains(List<T> list, T object){
-      if(object == null)return false;
+      if(object == null || list == null) return false;
 
       AtomicBoolean listContainsElement = new AtomicBoolean(false);
       list.forEach(element -> {
@@ -51,6 +48,7 @@ class GradleMapperTest {
       });
       return listContainsElement.get();
    }
+
 
 
 }
