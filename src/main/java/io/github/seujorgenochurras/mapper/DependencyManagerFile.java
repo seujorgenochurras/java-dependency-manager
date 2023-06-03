@@ -14,4 +14,8 @@ public interface DependencyManagerFile {
 
    List<Dependency> getDependencies();
 
+   void removeDependency(Dependency dependency);
+
+   <T extends AbstractPlugin> void removePlugin(T plugin);
+
 }

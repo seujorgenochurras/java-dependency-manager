@@ -26,7 +26,7 @@ public class FileSearcher {
    public static FileSearcher searchForFile(String fileName) {
 
       FileSearcher fileSearcher = new FileSearcher(SearchPlaces.PROJECT_ROOT);
-      return fileSearcher.addFileToSearch(fileSearcher.searchPath + "/" + fileName);
+      return fileSearcher.addFileToSearch(fileName);
    }
 
    private FileSearcher addFileToSearch(String fileNameAndPath) {

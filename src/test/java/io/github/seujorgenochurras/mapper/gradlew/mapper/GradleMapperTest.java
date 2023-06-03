@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class GradleMapperTest {
    private static final DependencyManagerFile buildFile = DependencyManager.dependencyManagerFile;
 
-
    @Test
    void isMappingDependencies(){
       assertNotNull(buildFile.getDependencies());

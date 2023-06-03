@@ -1,7 +1,5 @@
 package io.github.seujorgenochurras.domain.dependency;
 
-import io.github.seujorgenochurras.domain.DependencyType;
-
 public class DependencyBuilder {
    private DependencyBuilder(){}
 

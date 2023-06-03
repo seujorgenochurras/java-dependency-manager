@@ -56,7 +56,7 @@ publishing {
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = project.properties["repoUser"].toString()
-                password = project.properties["repoPassword"].toString();
+                password = project.properties["repoPassword"].toString()
             }
         }
     }
@@ -69,8 +69,6 @@ java {
 signing {
     sign(publishing.publications["mavenJava"])
 }
-
-
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()

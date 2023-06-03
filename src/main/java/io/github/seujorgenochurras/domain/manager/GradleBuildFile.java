@@ -1,7 +1,9 @@
 package io.github.seujorgenochurras.domain.manager;
 
 import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
+import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.utils.FileUtils;
 
@@ -9,32 +11,35 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static io.github.seujorgenochurras.utils.StringUtils.*;
 
 public class GradleBuildFile implements DependencyManagerFile {
-   private List<Dependency> dependencies;
-   private List< AbstractPlugin> plugins;
+   private List<DependencyDeclaration> dependencies;
+   private List<PluginDeclaration> plugins;
    private File originFile;
    private String originFileAsString;
    private FileWriter fileWriter;
 
-
    @Override
    public List<Dependency> getDependencies() {
-      return dependencies;
+      return dependencies.stream()
+              .map(DependencyDeclaration::toDependencyObject)
+              .collect(Collectors.toList());
    }
 
    @Override
-   public List<? extends AbstractPlugin> getPlugins() {
-      return plugins;
+   public List<AbstractPlugin> getPlugins() {
+      return plugins.stream()
+              .map(PluginDeclaration::toPluginObject).toList();
    }
 
-   public void setPlugins(List<AbstractPlugin> plugins) {
+   public void setPlugins(List<PluginDeclaration> plugins) {
       this.plugins = plugins;
    }
 
-   public void setDependencies(List<Dependency> dependencies) {
+   public void setDependencies(List<DependencyDeclaration> dependencies) {
       this.dependencies = dependencies;
    }
 
@@ -45,7 +50,7 @@ public class GradleBuildFile implements DependencyManagerFile {
    public void setOriginFile(File originFile) {
       this.originFile = originFile;
       this.originFileAsString = FileUtils.getFileAsString(originFile);
-    }
+   }
 
    public FileWriter getFileWriter() {
       if (this.fileWriter == null) {
@@ -66,12 +71,11 @@ public class GradleBuildFile implements DependencyManagerFile {
               + "\")";
 
 
-    int indexOfDependenciesBlock = getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
+      int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
       addTextToOriginFile(declaration, indexOfDependenciesBlock);
       tryRewriteOriginFile();
-     this.dependencies.add(dependency);
+      //this.dependencies.add(dependency);
    }
-
 
    @Override
    public <T extends AbstractPlugin> void addPlugin(T plugin) {
@@ -79,7 +83,21 @@ public class GradleBuildFile implements DependencyManagerFile {
 
       addTextToOriginFile(declaration, getIndexOfStringWithRegex(originFileAsString, "plugins"));
       tryRewriteOriginFile();
-      this.plugins.add(plugin);
+    //  this.plugins.add(plugin);
+   }
+
+   @Override
+   public void removeDependency(Dependency dependency) {
+
+   }
+
+   @Override
+   public <T extends AbstractPlugin> void removePlugin(T plugin) {
+
+   }
+
+   private int getIndexOfDependenciesBlock(){
+      return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
    }
 
    private void addTextToOriginFile(String text, int indexOfWhereToWrite) {
@@ -88,18 +106,11 @@ public class GradleBuildFile implements DependencyManagerFile {
    }
 
    private void tryRewriteOriginFile() {
-      try(FileWriter originFileWriter = getFileWriter()) {
+      try (FileWriter originFileWriter = getFileWriter()) {
          originFileWriter.write(originFileAsString);
       } catch (IOException e) {
          throw new IllegalStateException(e);
       }
-   }
-
-   private int getIndexOfStringWithRegex(String string, String regex){
-
-      Matcher matcher = Pattern.compile(regex).matcher(string);
-      matcher.find();
-      return matcher.end();
    }
 
    private FileWriter tryInstantiateFileWriterFromFile(File file) {
@@ -109,7 +120,6 @@ public class GradleBuildFile implements DependencyManagerFile {
          throw new IllegalStateException(e);
       }
    }
-
 
    @Override
    public String toString() {
