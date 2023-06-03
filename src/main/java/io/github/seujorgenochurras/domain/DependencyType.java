@@ -1,17 +1,22 @@
 package io.github.seujorgenochurras.domain;
 
 public enum DependencyType {
-   TEST_IMPLEMENTATION,
-   TEST_RUNTIME_ONLY,
+   TEST_IMPLEMENTATION("testImplementation"),
+   TEST_RUNTIME_ONLY("testRuntimeOnly"),
 
-   //TODO TEST_COMPILE_ONLY,
+   TEST_COMPILE_ONLY("testCompileOnly"),
 
-   RUNTIME_ONLY,
-   IMPLEMENTATION,
+   RUNTIME_ONLY("runtimeOnly"),
+   IMPLEMENTATION("implementation"),
 
-   //TODO  API,
+   API("api"),
 
-   COMPILE_ONLY,
-   //TODO COMPILE_ONLY_API,
+   COMPILE_ONLY("compileOnly"),
+   COMPILE_ONLY_API("compileOnlyApi");
 
+   public final String typeName;
+
+   DependencyType(String typeName) {
+      this.typeName = typeName;
+   }
 }

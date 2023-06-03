@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.mapper.gradlew;
 
-import io.github.seujorgenochurras.domain.Dependency;
-import io.github.seujorgenochurras.domain.Plugin;
+import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.domain.manager.GradleBuildFileBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
@@ -23,32 +23,35 @@ public class GradleMapper extends DependencyMapper {
 
    @Override
    protected DependencyManagerFile map() {
-         this.removeComments();
-         mapDependencies();
-         mapPlugins();
+      this.removeComments();
+      mapDependencies();
+      mapPlugins();
 
-         return GradleBuildFileBuilder.startBuild()
-                 .dependencies(this.dependencies)
-                 .plugins(this.plugins)
-                 .originFile(this.rootFile)
-                 .getBuild();
+      return GradleBuildFileBuilder.startBuild()
+              .dependencies(this.dependencies)
+              .plugins(this.plugins)
+              .originFile(this.rootFile)
+              .getBuild();
    }
 
    @Override
    protected void mapDependencies() {
 
       getDependencyDeclarations().forEach(dependencyDeclaration -> {
-         dependencyDeclaration = dependencyDeclaration.replaceAll("[()\"]","");
+         dependencyDeclaration = dependencyDeclaration.replaceAll("[()\"]", "");
 
          String[] dependencyDeclarationComponents = dependencyDeclaration.split(":");
          String dependencyGroup = dependencyDeclarationComponents[0];
          String dependencyArtifact = dependencyDeclarationComponents[1];
-         String dependencyVersion = dependencyDeclarationComponents.length == 3? dependencyDeclarationComponents[2] : "";
+         String dependencyVersion = dependencyDeclarationComponents.length == 3 ? dependencyDeclarationComponents[2] : "";
 
-         this.dependencies.add(new Dependency()
-                 .setGroupName(dependencyGroup)
-                 .setArtifact(dependencyArtifact)
-                 .setVersion(dependencyVersion));
+         this.dependencies.add(DependencyBuilder
+                 .startBuild()
+                 .group(dependencyGroup)
+                 .artifact(dependencyArtifact)
+                 .version(dependencyVersion)
+                 .buildResult()
+         );
       });
    }
 
@@ -56,7 +59,7 @@ public class GradleMapper extends DependencyMapper {
    protected void mapPlugins() {
       getAllPluginDeclarations().forEach(pluginDeclaration -> {
          pluginDeclaration = pluginDeclaration.replaceAll("[()\"]", "");
-         this.plugins.add(new Plugin().setId(pluginDeclaration));
+         this.plugins.add(new AbstractPlugin().setId(pluginDeclaration));
       });
    }
 

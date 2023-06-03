@@ -1,8 +1,6 @@
 package io.github.seujorgenochurras.manager;
 
-import io.github.seujorgenochurras.domain.Plugin;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
-import io.github.seujorgenochurras.domain.Dependency;
 import io.github.seujorgenochurras.file.DependencyFileNotFoundException;
 import io.github.seujorgenochurras.file.FileSearcher;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
@@ -10,7 +8,7 @@ import io.github.seujorgenochurras.mapper.DependencyMapper;
 import java.io.File;
 
 public class DependencyManager {
-   private static final DependencyManagerFile dependencyManagerFile;
+   public static final DependencyManagerFile dependencyManagerFile;
    private static final File dependencyManagerRootFile;
 
    private DependencyManager(){}
@@ -20,12 +18,6 @@ public class DependencyManager {
       dependencyManagerFile = DependencyMapper.mapFile(dependencyManagerRootFile);
    }
 
-   public static void addDependency(Dependency dependency){
-      dependencyManagerFile.addDependency(dependency);
-   }
-   public static void addPlugin(Plugin plugin){
-      dependencyManagerFile.addPlugin(plugin);
-   }
 
    private static File getDependencyManagerAsFile(){
       return FileSearcher

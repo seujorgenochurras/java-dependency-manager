@@ -64,14 +64,4 @@ public class FileSearcher {
       this.notFoundSupplier = notFoundSupplier;
       return this;
    }
-   /*
-   FileSearcher
-              .searchIn(SearchPlaces.PROJECT_ROOT)
-              .searchForFile("build.gradle.kts")
-
-              .ifNotFoundSearchFor("build.gradle")
-              .ifNotFoundSearchFor("maven.pom")
-              .ifNotFoundThrow(new FileNotFoundException("No dependency manager file found"))
-              .getSearchResult();
-    */
 }
