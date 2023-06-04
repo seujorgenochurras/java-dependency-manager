@@ -11,7 +11,8 @@ public class DependencyManager {
    public static final DependencyManagerFile dependencyManagerFile;
    private static final File dependencyManagerRootFile;
 
-   private DependencyManager(){}
+   private DependencyManager() {
+   }
 
    static {
       dependencyManagerRootFile = getDependencyManagerAsFile();
@@ -19,7 +20,7 @@ public class DependencyManager {
    }
 
 
-   private static File getDependencyManagerAsFile(){
+   private static File getDependencyManagerAsFile() {
       return FileSearcher
               .searchForFile("build.gradle.kts")
               .ifNotFoundSearchFor("build.gradle")

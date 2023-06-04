@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import static io.github.seujorgenochurras.utils.StringUtils.*;
 
 public class GradleBuildFile implements DependencyManagerFile {
+
+   //TODO learn about tres and change this to a tree
    private List<DependencyDeclaration> dependencies;
    private List<PluginDeclaration> plugins;
    private File originFile;
@@ -74,29 +76,20 @@ public class GradleBuildFile implements DependencyManagerFile {
       int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
       addTextToOriginFile(declaration, indexOfDependenciesBlock);
       tryRewriteOriginFile();
-      //this.dependencies.add(dependency);
+      this.dependencies.add(new DependencyDeclaration(declaration, indexOfDependenciesBlock));
    }
 
    @Override
    public <T extends AbstractPlugin> void addPlugin(T plugin) {
       String declaration = "id '" + plugin.getId().trim() + "'\n";
 
-      addTextToOriginFile(declaration, getIndexOfStringWithRegex(originFileAsString, "plugins"));
+      int indexOfPluginBlock = getIndexOfStringWithRegex(originFileAsString, "plugins");
+      addTextToOriginFile(declaration, indexOfPluginBlock);
       tryRewriteOriginFile();
-    //  this.plugins.add(plugin);
+      this.plugins.add(new PluginDeclaration(declaration, indexOfPluginBlock));
    }
 
-   @Override
-   public void removeDependency(Dependency dependency) {
-
-   }
-
-   @Override
-   public <T extends AbstractPlugin> void removePlugin(T plugin) {
-
-   }
-
-   private int getIndexOfDependenciesBlock(){
+   private int getIndexOfDependenciesBlock() {
       return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
    }
 

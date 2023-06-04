@@ -3,7 +3,6 @@ package io.github.seujorgenochurras.domain.dependency;
 public enum DependencyType {
    TEST_IMPLEMENTATION("testImplementation"),
    TEST_RUNTIME_ONLY("testRuntimeOnly"),
-
    TEST_COMPILE_ONLY("testCompileOnly"),
 
    RUNTIME_ONLY("runtimeOnly"),
@@ -19,9 +18,10 @@ public enum DependencyType {
    DependencyType(String typeName) {
       this.typeName = typeName;
    }
-   public static DependencyType getTypeByName(String typeName){
-      for(DependencyType type : values()){
-         if(type.name().equals(typeName)) return type;
+
+   public static DependencyType getTypeByName(String typeName) {
+      for (DependencyType type : values()) {
+         if (type.name().equals(typeName)) return type;
       }
       throw new DependencyTypeNotFoundException("Dependency type \"" + typeName + "\" not found");
    }
