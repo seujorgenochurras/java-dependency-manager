@@ -38,3 +38,4 @@ gradle
 jars
 META-INF
 out
+src/main/java/io/github/seujorgenochurras/Main.java

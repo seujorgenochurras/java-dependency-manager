@@ -4,26 +4,39 @@ import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.file.DependencyFileNotFoundException;
 import io.github.seujorgenochurras.file.FileSearcher;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
+import io.github.seujorgenochurras.utils.StringUtils;
 
 import java.io.File;
 
 public class DependencyManager {
-   public static final DependencyManagerFile dependencyManagerFile;
-   private static final File dependencyManagerRootFile;
 
    private DependencyManager() {
    }
 
-   static {
-      dependencyManagerRootFile = getDependencyManagerAsFile();
-      dependencyManagerFile = DependencyMapper.mapFile(dependencyManagerRootFile);
+   /**
+    Tries to find any dependency manager file <i>such as (build.gradle, build.gradle.kts, and maven.pom) </i>
+    *
+    * @param filePath the generic path of the dependency manager file (it shouldn't contain the file name in the path)
+    * @return A dependency manager file as object, so you can do some cool stuff with it
+    * @see DependencyManagerFile
+    */
+   public static DependencyManagerFile getDependencyManagerFile(String filePath){
+      if(StringUtils.lastCharOfString(filePath) != '/'){
+         filePath = filePath.concat("/");
+      }
+
+      return DependencyMapper.mapFile(getDependencyManagerAsFile(filePath));
    }
 
 
-   private static File getDependencyManagerAsFile() {
+   public static DependencyManagerFile getDependencyManagerFile() {
+      return getDependencyManagerFile("../../");
+   }
+
+   private static File getDependencyManagerAsFile(String path) {
       return FileSearcher
-              .searchForFile("build.gradle.kts")
-              .ifNotFoundSearchFor("build.gradle")
+              .searchForFileIn("build.gradle", path)
+              .ifNotFoundSearchFor("build.gradle.kts")
               .ifNotFoundSearchFor("maven.pom")
               .ifNotFoundThrow(() -> new DependencyFileNotFoundException("No dependency manager file found"))
               .getSearchResult();
