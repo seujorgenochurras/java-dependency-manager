@@ -1,14 +1,12 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.domain.DependencyType;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
+import io.github.seujorgenochurras.manager.DependencyManager;
 
-import java.io.File;
 
 public class Main {
    public static void main(String[] args)  {
-      DependencyMapper.mapFile(new File("build.gradle.kts"))
+      DependencyManager.dependencyManagerFile
               .addDependency(DependencyBuilder
                       .startBuild()
                       .version("2")

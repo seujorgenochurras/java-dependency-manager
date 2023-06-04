@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.mapper;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
-import io.github.seujorgenochurras.domain.dependency.Dependency;
+import io.github.seujorgenochurras.domain.PluginDeclaration;
+import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 import io.github.seujorgenochurras.mapper.gradlew.GradleMapper;
 import io.github.seujorgenochurras.mapper.maven.MavenPomMapper;
 
@@ -14,9 +14,9 @@ public abstract class DependencyMapper {
 
    protected final File rootFile;
 
-   protected List<Dependency> dependencies = new ArrayList<>();
+   protected List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
 
-   protected List<AbstractPlugin> plugins = new ArrayList<>();
+   protected List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
 
 
    protected DependencyMapper(File rootFile) {
