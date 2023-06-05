@@ -4,8 +4,9 @@ plugins {
     id("signing")
 }
 
-group "io.github.seujorgenochurras"
-version "0.3.1"
+
+val group = "io.github.seujorgenochurras"
+val versionNum = "0.3.1"
 repositories {
     mavenCentral()
 }
@@ -19,9 +20,9 @@ dependencies{
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            groupId = "io.github.seujorgenochurras"
+            groupId = group
             artifactId = "java-dependency-manager"
-            version = "0.3.1"
+            version = versionNum
             from(components["java"])
 
             pom {

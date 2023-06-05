@@ -6,7 +6,7 @@ import io.github.seujorgenochurras.manager.DependencyManager;
 
 public class Example {
    public static void main(String[] args) {
-      DependencyManager.getDependencyManagerFile(".")
+      DependencyManager.getDependencyManagerFile(System.getProperty("user.dir"))
               .addDependency(DependencyBuilder
                       .startBuild()
                       .version("2asdasdas")
