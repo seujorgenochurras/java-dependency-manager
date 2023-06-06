@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class MavenPomMapper extends DependencyMapper {
+   private PomFileMapped pomFileMapped;
+
    public MavenPomMapper(File rootFile) {
       super(rootFile);
    }
-
-   private PomFileMapped pomFileMapped;
 
    @Override
    protected DependencyManagerFile map() {
@@ -29,15 +29,17 @@ public class MavenPomMapper extends DependencyMapper {
 
       return null;
    }
-   private void initPomFile(){
+
+   private void initPomFile() {
       String rawXmlFile = FileUtils.getFileAsString(new File("dependency-file-example/pom.xml"));
       //  String rawXmlFile = FileUtils.getFileAsString(rootFile));
       this.pomFileMapped = tryGeneratePomFileMapped(rawXmlFile);
    }
-   private PomFileMapped tryGeneratePomFileMapped(String rawFile){
-      try{
+
+   private PomFileMapped tryGeneratePomFileMapped(String rawFile) {
+      try {
          return new XmlMapper().readValue(rawFile, PomFileMapped.class);
-      }catch (JsonProcessingException e){
+      } catch (JsonProcessingException e) {
          Logger.getLogger(MavenPomMapper.class.getName()).severe("An error occurred while trying to parse xml file");
          e.printStackTrace();
          throw new DependencyFileNotFoundException(e);
@@ -80,51 +82,52 @@ public class MavenPomMapper extends DependencyMapper {
                     "\ndependencies=" + dependencies +
                     '}';
          }
-      private static final class PomFileDependency {
 
-         @JacksonXmlProperty(localName = "groupId")
-         private String groupName;
-         @JacksonXmlProperty(localName = "artifactId")
-         private String artifactName;
-         @JacksonXmlProperty(localName = "version")
-         private String version;
+         private static final class PomFileDependency {
 
-         public String getGroupName() {
-            return groupName;
+            @JacksonXmlProperty(localName = "groupId")
+            private String groupName;
+            @JacksonXmlProperty(localName = "artifactId")
+            private String artifactName;
+            @JacksonXmlProperty(localName = "version")
+            private String version;
+
+            public String getGroupName() {
+               return groupName;
+            }
+
+            public PomFileDependency setGroupName(String groupName) {
+               this.groupName = groupName;
+               return this;
+            }
+
+            public String getArtifactName() {
+               return artifactName;
+            }
+
+            public PomFileDependency setArtifactName(String artifactName) {
+               this.artifactName = artifactName;
+               return this;
+            }
+
+            public String getVersion() {
+               return version;
+            }
+
+            public PomFileDependency setVersion(String version) {
+               this.version = version;
+               return this;
+            }
+
+            @Override
+            public String toString() {
+               return "PomFileDependency{\n" +
+                       "groupName='" + groupName + '\'' +
+                       ",\nartifactName='" + artifactName + '\'' +
+                       ",\nversion='" + version + '\'' +
+                       "}\n\n";
+            }
          }
-
-         public PomFileDependency setGroupName(String groupName) {
-            this.groupName = groupName;
-            return this;
-         }
-
-         public String getArtifactName() {
-            return artifactName;
-         }
-
-         public PomFileDependency setArtifactName(String artifactName) {
-            this.artifactName = artifactName;
-            return this;
-         }
-
-         public String getVersion() {
-            return version;
-         }
-
-         public PomFileDependency setVersion(String version) {
-            this.version = version;
-            return this;
-         }
-
-         @Override
-         public String toString() {
-            return "PomFileDependency{\n" +
-                    "groupName='" + groupName + '\'' +
-                    ",\nartifactName='" + artifactName + '\'' +
-                    ",\nversion='" + version + '\'' +
-                    "}\n\n";
-         }
-      }
       }
 
    }
