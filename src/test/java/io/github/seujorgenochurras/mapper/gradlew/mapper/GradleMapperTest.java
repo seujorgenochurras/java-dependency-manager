@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GradleMapperTest {
-   private static final DependencyManagerFile buildFile = DependencyManager.dependencyManagerFile;
+   private static final DependencyManagerFile buildFile = DependencyManager.getDependencyManagerFile();
 
    @Test
    void isMappingDependencies(){

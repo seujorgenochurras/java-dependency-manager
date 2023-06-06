@@ -28,7 +28,8 @@ public class DependencyDeclaration {
       this.declarationLine = declarationLine;
       return this;
    }
-   public Dependency toDependencyObject(){
+
+   public Dependency toDependencyObject() {
       if (dependency != null) return dependency;
 
       String cleanDeclaration = rawDeclaration.replaceAll("[(\")]", " ")
