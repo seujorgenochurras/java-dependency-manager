@@ -1,46 +1,41 @@
 package io.github.seujorgenochurras.file;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class FileSearcher {
-   private FileSearcher(SearchPlaces searchPlace) {
-      this.searchPath = searchPlace.placePath;
-   }
+
+   private final String searchPath;
+   private final List<String> filesNameToSearch = new ArrayList<>();
+   private Supplier<? extends RuntimeException> notFoundSupplier = () -> new NoSuchElementException("File not found");
 
    public FileSearcher(String searchPath) {
       this.searchPath = searchPath;
    }
 
-   private final String searchPath;
-
-   private final List<String> filesNameToSearch = new ArrayList<>();
-
-   private Supplier<? extends RuntimeException> notFoundSupplier = () -> new NoSuchElementException("File not found");
-
-   public static FileSearcher searchIn(SearchPlaces searchPlace) {
-      return new FileSearcher(searchPlace);
-   }
-
-   public static FileSearcher searchForFile(String fileName) {
-
-      FileSearcher fileSearcher = new FileSearcher(SearchPlaces.PROJECT_ROOT);
+   public static FileSearcher searchForFileIn(String fileName, String searchPath) {
+      FileSearcher fileSearcher = new FileSearcher(searchPath);
       return fileSearcher.addFileToSearch(fileName);
    }
 
-   private FileSearcher addFileToSearch(String fileNameAndPath) {
-      this.filesNameToSearch.add(fileNameAndPath);
+   private FileSearcher addFileToSearch(String fileName) {
+      this.filesNameToSearch.add(this.searchPath + fileName);
       return this;
    }
 
    public FileSearcher ifNotFoundSearchFor(String fileName) {
-      return addFileToSearch(this.searchPath + "/" + fileName);
+      return addFileToSearch(fileName);
    }
 
 
    private File searchFile(String fileNameAndPath) {
-      return new File(fileNameAndPath);
+      File fileFound = new File(fileNameAndPath);
+      if (!fileFound.exists()) return null;
+      return fileFound;
    }
 
    public File getSearchResult() {
@@ -49,7 +44,6 @@ public class FileSearcher {
 
       for (String fileNameAndPath : filesNameToSearch) {
          if (!Objects.isNull(fileFound)) break;
-
          fileFound = searchFile(fileNameAndPath);
       }
 

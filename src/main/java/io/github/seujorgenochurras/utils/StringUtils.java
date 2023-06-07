@@ -6,9 +6,10 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
-   private StringUtils(){
+   private StringUtils() {
       //Util class
    }
+
    public static Matcher generateStringMatcherFromRegex(String string, String regex) {
       Pattern pattern = Pattern.compile(regex);
       return pattern.matcher(string);
@@ -31,10 +32,11 @@ public class StringUtils {
     *       ...
     *    }
     * </pre>
+    *
     * @param codeBlockName the code block name
     * @return a regex of the code block
     */
-   public static String generateRegexForCodeBlock(String codeBlockName){
+   public static String generateRegexForCodeBlock(String codeBlockName) {
       return "(" + codeBlockName + ".*)\\{([^}]+)}";
    }
 
@@ -44,6 +46,12 @@ public class StringUtils {
       matcher.find();
       return matcher.end();
    }
+
+   public static char lastCharOfString(String string) {
+      if (string.length() == 0) return '\0';
+      return string.charAt(string.length() - 1);
+   }
+  
    public static String[] trimStringArr(String[] stringsArr){
       String[] trimmedStringArr = new String[stringsArr.length];
       for(int i = 0; i < stringsArr.length -1; i++){

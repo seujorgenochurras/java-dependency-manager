@@ -7,9 +7,10 @@ public class Dependency {
 
    private DependencyType dependencyType = DependencyType.IMPLEMENTATION;
 
-    Dependency() {
+   Dependency() {
       //only by builder
    }
+
    public DependencyType getDependencyType() {
       return dependencyType;
    }
@@ -23,24 +24,22 @@ public class Dependency {
       return groupName;
    }
 
-
-   public String getArtifact() {
-      return artifact;
-   }
-
-
-   public String getVersion() {
-      return version;
-   }
-
    public Dependency setGroupName(String groupName) {
       this.groupName = groupName;
       return this;
    }
 
+   public String getArtifact() {
+      return artifact;
+   }
+
    public Dependency setArtifact(String artifact) {
       this.artifact = artifact;
       return this;
+   }
+
+   public String getVersion() {
+      return version;
    }
 
    public Dependency setVersion(String version) {

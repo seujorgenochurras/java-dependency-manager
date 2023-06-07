@@ -7,26 +7,31 @@ import java.io.File;
 import java.util.List;
 
 public class GradleBuildFileBuilder {
-   private GradleBuildFileBuilder(){}
+   private GradleBuildFileBuilder() {
+   }
 
    private final GradleBuildFile gradleBuildFile = new GradleBuildFile();
 
-   public static GradleBuildFileBuilder startBuild(){
+   public static GradleBuildFileBuilder startBuild() {
       return new GradleBuildFileBuilder();
    }
-   public GradleBuildFileBuilder dependenciesDeclaration(List<DependencyDeclaration> dependencyList){
+
+   public GradleBuildFileBuilder dependenciesDeclaration(List<DependencyDeclaration> dependencyList) {
       this.gradleBuildFile.setDependencies(dependencyList);
       return this;
    }
-   public GradleBuildFileBuilder plugins(List<PluginDeclaration> plugins){
+
+   public GradleBuildFileBuilder plugins(List<PluginDeclaration> plugins) {
       this.gradleBuildFile.setPlugins(plugins);
       return this;
    }
-   public GradleBuildFileBuilder originFile(File file ){
+
+   public GradleBuildFileBuilder originFile(File file) {
       this.gradleBuildFile.setOriginFile(file);
       return this;
    }
-   public GradleBuildFile getBuild(){
+
+   public GradleBuildFile getBuild() {
       return this.gradleBuildFile;
    }
 
