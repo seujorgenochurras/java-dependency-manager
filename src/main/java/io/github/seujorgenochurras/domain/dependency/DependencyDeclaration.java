@@ -2,6 +2,8 @@ package io.github.seujorgenochurras.domain.dependency;
 
 import io.github.seujorgenochurras.utils.StringUtils;
 
+import java.util.Arrays;
+
 public class DependencyDeclaration {
    private String rawDeclaration;
    private int declarationLine;
@@ -41,11 +43,11 @@ public class DependencyDeclaration {
 
          String[] dependencyDeclarationComponents = cleanDeclaration.split(":");
          dependencyDeclarationComponents = StringUtils.trimStringArr(dependencyDeclarationComponents);
+         System.out.println(Arrays.toString(dependencyDeclarationComponents));
 
          String dependencyGroup = dependencyDeclarationComponents[0];
          String dependencyArtifact = dependencyDeclarationComponents[1];
          String dependencyVersion = dependencyDeclarationComponents.length == 3 ? dependencyDeclarationComponents[2] : "";
-
          dependency = DependencyBuilder.startBuild()
                  .group(dependencyGroup)
                  .artifact(dependencyArtifact)
