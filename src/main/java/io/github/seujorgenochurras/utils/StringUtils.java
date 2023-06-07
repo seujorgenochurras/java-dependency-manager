@@ -51,4 +51,12 @@ public class StringUtils {
       if (string.length() == 0) return '\0';
       return string.charAt(string.length() - 1);
    }
+  
+   public static String[] trimStringArr(String[] stringsArr){
+      String[] trimmedStringArr = new String[stringsArr.length];
+      for(int i = 0; i < stringsArr.length -1; i++){
+         trimmedStringArr[i] = stringsArr[i].trim();
+      }
+      return trimmedStringArr;
+   }
 }

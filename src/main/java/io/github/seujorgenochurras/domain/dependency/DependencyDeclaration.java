@@ -1,5 +1,7 @@
 package io.github.seujorgenochurras.domain.dependency;
 
+import io.github.seujorgenochurras.utils.StringUtils;
+
 public class DependencyDeclaration {
    private String rawDeclaration;
    private int declarationLine;
@@ -28,28 +30,39 @@ public class DependencyDeclaration {
       this.declarationLine = declarationLine;
       return this;
    }
+   public Dependency toDependencyObject(){
+      if (dependency == null) {
 
-   public Dependency toDependencyObject() {
-      if (dependency != null) return dependency;
+         String cleanDeclaration = rawDeclaration.replaceAll(" {2}", "");
+         String dependencyType = cleanDeclaration.split("[(\"]")[0];
 
-      String cleanDeclaration = rawDeclaration.replaceAll("[(\")]", " ")
-              .replaceAll(" {2}", "");
+         cleanDeclaration = cleanDeclaration.replaceAll("[(\")]", " ")
+                 .replaceFirst("^(.*?) ", "");
 
-      String dependencyType = cleanDeclaration.split(" ")[0];
-      cleanDeclaration = cleanDeclaration.replaceFirst("^(.*?) ", "");
+         String[] dependencyDeclarationComponents = cleanDeclaration.split(":");
+         dependencyDeclarationComponents = StringUtils.trimStringArr(dependencyDeclarationComponents);
 
-      String[] dependencyDeclarationComponents = cleanDeclaration.split(":");
-      String dependencyGroup = dependencyDeclarationComponents[0];
-      String dependencyArtifact = dependencyDeclarationComponents[1];
-      String dependencyVersion = dependencyDeclarationComponents.length == 3 ? dependencyDeclarationComponents[2] : "";
+         String dependencyGroup = dependencyDeclarationComponents[0];
+         String dependencyArtifact = dependencyDeclarationComponents[1];
+         String dependencyVersion = dependencyDeclarationComponents.length == 3 ? dependencyDeclarationComponents[2] : "";
 
-      dependency = DependencyBuilder.startBuild()
-              .group(dependencyGroup)
-              .artifact(dependencyArtifact)
-              .version(dependencyVersion)
-              .dependencyType(DependencyType.valueOf(dependencyType))
-              .buildResult();
-
+         dependency = DependencyBuilder.startBuild()
+                 .group(dependencyGroup)
+                 .artifact(dependencyArtifact)
+                 .version(dependencyVersion)
+                 .dependencyType(DependencyType.getTypeByName(dependencyType))
+                 .buildResult();
+      }
       return dependency;
+   }
+
+
+   @Override
+   public String toString() {
+      return "DependencyDeclaration{" +
+              "rawDeclaration='" + rawDeclaration + '\'' +
+              ", declarationLine=" + declarationLine +
+              ", dependency=" + dependency +
+              '}';
    }
 }

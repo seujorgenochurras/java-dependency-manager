@@ -52,7 +52,9 @@ public class GradleMapper extends DependencyMapper {
 
    protected List<PluginDeclaration> getAllPluginDeclarations() {
       List<PluginDeclaration> pluginsAsString = new ArrayList<>();
+
       getLinesOfPluginsBlock().forEach((lineNumber, line) -> {
+
          String pluginDeclarationRegex = "(?<=id).*['\"]";
          Matcher matcher = generateStringMatcherFromRegex(line, pluginDeclarationRegex);
          getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) ->
@@ -66,8 +68,7 @@ public class GradleMapper extends DependencyMapper {
       List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
 
       getLinesOfDependenciesBlock().forEach((lineNumber, line) -> {
-
-         String dependencyDeclarationRegex = "(?<=testImplementation|implementation|runtime_only|testRuntimeOnly).*".trim();
+         String dependencyDeclarationRegex = "(testImplementation|implementation|runtime_only|testRuntimeOnly).*".trim();
          Matcher dependencyDeclarationMatcher = generateStringMatcherFromRegex(line, dependencyDeclarationRegex);
 
          getAllMatchesOfMatcher(dependencyDeclarationMatcher)
@@ -78,8 +79,10 @@ public class GradleMapper extends DependencyMapper {
    }
 
    protected HashMap<Integer, String> getBlockLinesFromGradleFile(String blockName) {
+
       String blockRegex = generateRegexForCodeBlock(blockName);
       Matcher matcher = generateGradleMatcherFromRegex(blockRegex);
+
       return getAllMatchesOfMatcher(matcher);
    }
 

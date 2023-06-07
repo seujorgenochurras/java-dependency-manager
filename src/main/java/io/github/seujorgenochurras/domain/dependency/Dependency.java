@@ -53,6 +53,7 @@ public class Dependency {
               "groupName='" + groupName + '\'' +
               ", artifact='" + artifact + '\'' +
               ", version='" + version + '\'' +
+              ", dependencyType=" + dependencyType +
               '}';
    }
 
@@ -60,12 +61,9 @@ public class Dependency {
    public boolean equals(Object o) {
       if (this == o) return true;
       if (!(o instanceof Dependency that)) return false;
-
-      if (getGroupName() != null ? !getGroupName().equals(that.getGroupName()) : that.getGroupName() != null)
-         return false;
-      if (getArtifact() != null ? !getArtifact().equals(that.getArtifact()) : that.getArtifact() != null) return false;
-      if (getVersion() != null ? !getVersion().equals(that.getVersion()) : that.getVersion() != null) return false;
-      return getDependencyType() == that.getDependencyType();
+      return getDependencyType().equals(that.dependencyType) &&
+              getArtifact().equals(that.artifact) &&
+              getVersion().equals(that.version);
    }
 
    @Override

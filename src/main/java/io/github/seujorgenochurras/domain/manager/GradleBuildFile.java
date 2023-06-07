@@ -4,6 +4,7 @@ import io.github.seujorgenochurras.domain.AbstractPlugin;
 import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
+import io.github.seujorgenochurras.file.DependencyNotFoundException;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.utils.FileUtils;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.github.seujorgenochurras.utils.StringUtils.*;
+import static io.github.seujorgenochurras.utils.StringUtils.getIndexOfStringWithRegex;
 
 public class GradleBuildFile implements DependencyManagerFile {
 
@@ -22,13 +23,16 @@ public class GradleBuildFile implements DependencyManagerFile {
    private List<PluginDeclaration> plugins;
    private File originFile;
    private String originFileAsString;
-   private FileWriter fileWriter;
 
    @Override
    public List<Dependency> getDependencies() {
       return dependencies.stream()
               .map(DependencyDeclaration::toDependencyObject)
               .collect(Collectors.toList());
+   }
+
+   public void setDependencies(List<DependencyDeclaration> dependencies) {
+      this.dependencies = dependencies;
    }
 
    @Override
@@ -41,10 +45,6 @@ public class GradleBuildFile implements DependencyManagerFile {
       this.plugins = plugins;
    }
 
-   public void setDependencies(List<DependencyDeclaration> dependencies) {
-      this.dependencies = dependencies;
-   }
-
    public File getOriginFile() {
       return originFile;
    }
@@ -54,11 +54,8 @@ public class GradleBuildFile implements DependencyManagerFile {
       this.originFileAsString = FileUtils.getFileAsString(originFile);
    }
 
-   public FileWriter getFileWriter() {
-      if (this.fileWriter == null) {
-         this.fileWriter = tryInstantiateFileWriterFromFile(originFile);
-      }
-      return fileWriter;
+   public FileWriter instantiateFileWriter() {
+      return tryInstantiateFileWriterFromFile(originFile);
    }
 
 
@@ -75,8 +72,7 @@ public class GradleBuildFile implements DependencyManagerFile {
 
       int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
       addTextToOriginFile(declaration, indexOfDependenciesBlock);
-      tryRewriteOriginFile();
-      this.dependencies.add(new DependencyDeclaration(declaration, indexOfDependenciesBlock));
+      this.dependencies.add(new DependencyDeclaration(declaration.replace("\n", ""), indexOfDependenciesBlock));
    }
 
    @Override
@@ -89,6 +85,41 @@ public class GradleBuildFile implements DependencyManagerFile {
       this.plugins.add(new PluginDeclaration(declaration, indexOfPluginBlock));
    }
 
+   @Override
+   public void removeDependency(Dependency dependency) {
+      commentDependency(dependency); //TODO fucking find a way to do this *without coding like monkey*
+      //DUDE IS THAT BANANA?
+   }
+
+
+   private DependencyDeclaration getDeclarationOfDependency(Dependency dependency) {
+      return this.dependencies.stream()
+              .filter(dependencyDeclaration -> {
+                 System.out.println("\n\nAS" +dependencyDeclaration.toDependencyObject());
+                 System.out.println("\nAWQIOSAOIJ\n\n"+ dependency);
+                 return dependencyDeclaration.toDependencyObject().equals(dependency);
+              })
+              .findFirst()
+              .orElseThrow(() ->
+                      new DependencyNotFoundException("Dependency " + dependency.getArtifact() + " not found"));
+   }
+
+   @Override
+   public <T extends AbstractPlugin> void removePlugin(T plugin) {
+      //Fuck you
+   }
+
+   @Override
+   public void commentDependency(Dependency dependency) {
+      DependencyDeclaration dependencyDeclaration = getDeclarationOfDependency(dependency);
+      commentLine(dependencyDeclaration.getDeclarationLine());
+   }
+
+   private void commentLine(int lineIndex){
+      addTextToOriginFile("//", lineIndex + 1);
+      tryRewriteOriginFile();
+   }
+
    private int getIndexOfDependenciesBlock() {
       return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
    }
@@ -99,7 +130,7 @@ public class GradleBuildFile implements DependencyManagerFile {
    }
 
    private void tryRewriteOriginFile() {
-      try (FileWriter originFileWriter = getFileWriter()) {
+      try (FileWriter originFileWriter = instantiateFileWriter()) {
          originFileWriter.write(originFileAsString);
       } catch (IOException e) {
          throw new IllegalStateException(e);

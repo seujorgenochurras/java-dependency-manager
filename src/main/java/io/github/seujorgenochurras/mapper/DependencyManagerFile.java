@@ -15,4 +15,6 @@ public interface DependencyManagerFile {
    List<Dependency> getDependencies();
 
 
+   void commentDependency(Dependency dependency);
+
 }
