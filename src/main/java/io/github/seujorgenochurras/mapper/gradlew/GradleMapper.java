@@ -72,8 +72,9 @@ public class GradleMapper extends DependencyMapper {
          Matcher dependencyDeclarationMatcher = generateStringMatcherFromRegex(line, dependencyDeclarationRegex);
 
          getAllMatchesOfMatcher(dependencyDeclarationMatcher)
-                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) ->
-                         dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber)));
+                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) -> {
+                    dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber));
+                 });
       });
       return dependenciesAsString;
    }

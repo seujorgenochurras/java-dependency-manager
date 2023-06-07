@@ -1,5 +1,6 @@
 package io.github.seujorgenochurras.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +47,7 @@ public class StringUtils {
    }
    public static String[] trimStringArr(String[] stringsArr){
       String[] trimmedStringArr = new String[stringsArr.length];
-      for(int i = 0; i < stringsArr.length -1; i++){
+      for(int i = 0; i < stringsArr.length; i++){
          trimmedStringArr[i] = stringsArr[i].trim();
       }
       return trimmedStringArr;
