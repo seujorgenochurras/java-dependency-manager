@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import static io.github.seujorgenochurras.utils.StringUtils.getIndexOfStringWithRegex;
 
 public class GradleBuildFile implements DependencyManagerFile {
+
+   //TODO learn about tres and change this to a tree
    private List<DependencyDeclaration> dependencies;
    private List<PluginDeclaration> plugins;
    private File originFile;
@@ -77,9 +79,10 @@ public class GradleBuildFile implements DependencyManagerFile {
    public <T extends AbstractPlugin> void addPlugin(T plugin) {
       String declaration = "id '" + plugin.getId().trim() + "'\n";
 
-      addTextToOriginFile(declaration, getIndexOfStringWithRegex(originFileAsString, "plugins"));
+      int indexOfPluginBlock = getIndexOfStringWithRegex(originFileAsString, "plugins");
+      addTextToOriginFile(declaration, indexOfPluginBlock);
       tryRewriteOriginFile();
-      //  this.plugins.add(plugin);
+      this.plugins.add(new PluginDeclaration(declaration, indexOfPluginBlock));
    }
 
    @Override
@@ -116,7 +119,6 @@ public class GradleBuildFile implements DependencyManagerFile {
       addTextToOriginFile("//", lineIndex + 1);
       tryRewriteOriginFile();
    }
-
 
    private int getIndexOfDependenciesBlock() {
       return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
