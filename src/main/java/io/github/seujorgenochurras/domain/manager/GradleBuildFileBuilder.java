@@ -1,8 +1,6 @@
 package io.github.seujorgenochurras.domain.manager;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
 import io.github.seujorgenochurras.domain.PluginDeclaration;
-import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 
 import java.io.File;

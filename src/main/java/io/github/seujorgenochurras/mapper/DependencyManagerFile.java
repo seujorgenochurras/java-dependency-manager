@@ -18,4 +18,6 @@ public interface DependencyManagerFile {
 
    <T extends AbstractPlugin> void removePlugin(T plugin);
 
+   void commentDependency(Dependency dependency);
+
 }

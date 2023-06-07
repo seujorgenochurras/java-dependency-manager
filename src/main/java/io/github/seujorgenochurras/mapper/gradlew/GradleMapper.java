@@ -52,12 +52,13 @@ public class GradleMapper extends DependencyMapper {
 
    protected List<PluginDeclaration> getAllPluginDeclarations() {
       List<PluginDeclaration> pluginsAsString = new ArrayList<>();
+
       getLinesOfPluginsBlock().forEach((lineNumber, line) -> {
+
          String pluginDeclarationRegex = "(?<=id).*['\"]";
          Matcher matcher = generateStringMatcherFromRegex(line, pluginDeclarationRegex);
-         getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) -> {
-            pluginsAsString.add(new PluginDeclaration(pluginDeclaration, pluginDeclarationLine));
-         });
+         getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) ->
+                 pluginsAsString.add(new PluginDeclaration(pluginDeclaration, pluginDeclarationLine)));
       });
       return pluginsAsString;
    }
@@ -67,20 +68,21 @@ public class GradleMapper extends DependencyMapper {
       List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
 
       getLinesOfDependenciesBlock().forEach((lineNumber, line) -> {
-         String dependencyDeclarationRegex = "(?<=testImplementation|implementation|runtime_only|testRuntimeOnly).*".trim();
+         String dependencyDeclarationRegex = "(testImplementation|implementation|runtime_only|testRuntimeOnly).*".trim();
          Matcher dependencyDeclarationMatcher = generateStringMatcherFromRegex(line, dependencyDeclarationRegex);
-         getAllMatchesOfMatcher(dependencyDeclarationMatcher)
-                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) -> {
 
-                    dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber));
-                 });
+         getAllMatchesOfMatcher(dependencyDeclarationMatcher)
+                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) ->
+                         dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber)));
       });
       return dependenciesAsString;
    }
 
    protected HashMap<Integer, String> getBlockLinesFromGradleFile(String blockName) {
+
       String blockRegex = generateRegexForCodeBlock(blockName);
       Matcher matcher = generateGradleMatcherFromRegex(blockRegex);
+
       return getAllMatchesOfMatcher(matcher);
    }
 

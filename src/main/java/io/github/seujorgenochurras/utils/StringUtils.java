@@ -44,4 +44,11 @@ public class StringUtils {
       matcher.find();
       return matcher.end();
    }
+   public static String[] trimStringArr(String[] stringsArr){
+      String[] trimmedStringArr = new String[stringsArr.length];
+      for(int i = 0; i < stringsArr.length -1; i++){
+         trimmedStringArr[i] = stringsArr[i].trim();
+      }
+      return trimmedStringArr;
+   }
 }

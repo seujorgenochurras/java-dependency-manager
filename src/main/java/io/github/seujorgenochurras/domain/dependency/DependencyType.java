@@ -21,7 +21,7 @@ public enum DependencyType {
    }
    public static DependencyType getTypeByName(String typeName){
       for(DependencyType type : values()){
-         if(type.name().equals(typeName)) return type;
+         if(type.typeName.equals(typeName.trim())) return type;
       }
       throw new DependencyTypeNotFoundException("Dependency type \"" + typeName + "\" not found");
    }
