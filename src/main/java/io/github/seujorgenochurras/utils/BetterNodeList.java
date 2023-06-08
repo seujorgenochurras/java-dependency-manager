@@ -13,7 +13,7 @@ public class BetterNodeList {
       this.rootNodeList = rootNodeList;
    }
    public void forEachChild(Consumer<Node> action){
-      if(rootNodeList.getLength() <= 0) throw new IllegalStateException("Node list cannot be empty");
+      if(rootNodeList.getLength() < 0) throw new IllegalStateException("Node list cannot be empty");
       for(int i = 0; i < rootNodeList.getLength() -1; i++){
          action.accept(rootNodeList.item(i));
       }
@@ -26,5 +26,9 @@ public class BetterNodeList {
          }
       });
       return nodeFound.get();
+   }
+
+   public NodeList getRootNodeList() {
+      return rootNodeList;
    }
 }

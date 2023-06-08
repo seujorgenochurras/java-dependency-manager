@@ -1,9 +1,9 @@
 package io.github.seujorgenochurras.mapper.maven;
 
 import io.github.seujorgenochurras.domain.AbstractPlugin;
-import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
+import io.github.seujorgenochurras.domain.manager.maven.MavenBuildFileBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
 import io.github.seujorgenochurras.utils.BetterNodeList;
@@ -15,10 +15,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,23 +27,10 @@ public class MavenPomMapper extends DependencyMapper {
    private static final Logger logger = Logger.getLogger(MavenPomMapper.class.getName());
    private Document pomFileDocument;
    private List<Dependency> dependencies = new ArrayList<>();
-   private List<AbstractPlugin> plugins = new ArrayList<>();
+   private final List<AbstractPlugin> plugins = new ArrayList<>();
 
    public MavenPomMapper(File rootFile) {
       super(rootFile);
-   }
-
-   public static void main(String[] args) throws Exception {
-      DocumentBuilder documentBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
-      File file = new File("dependency-file-example/pom.xml");
-      Document document = documentBuilder.parse(file);
-
-
-      document.getElementsByTagName("groupId").item(1).setTextContent("MEU PAU DE ASSA");
-      var domSource1 = new DOMSource(document);
-
-      Transformer transformer = TransformerFactory.newDefaultInstance().newTransformer();
-      transformer.transform(domSource1, new StreamResult(file));
    }
 
    @Override
@@ -55,7 +38,12 @@ public class MavenPomMapper extends DependencyMapper {
       tryInitPomFileDocument();
       mapDependencies();
       mapPlugins();
-      return null;
+
+      return MavenBuildFileBuilder.startBuild()
+              .rootFile(rootFile)
+              .dependencies(dependencies)
+              .plugins(plugins)
+              .getBuildResult();
    }
 
    @Override
@@ -94,9 +82,6 @@ public class MavenPomMapper extends DependencyMapper {
 
    private NodeList getDependencyNodeList() {
       return this.pomFileDocument.getElementsByTagName("dependency");
-   }
-   private NodeList getPluginNodeList() {
-      return this.pomFileDocument.getElementsByTagName("plugin");
    }
 
    private void tryInitPomFileDocument() {

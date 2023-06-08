@@ -21,7 +21,7 @@ public abstract class DependencyMapper {
       String fileName = file.getName();
       if (fileName.equals("build.gradle.kts") || fileName.equals("build.gradle")) {
          return new GradleMapper(file);
-      } else if (fileName.equals("maven.pom")) {
+      } else if (fileName.equals("pom.xml")) {
          return new MavenPomMapper(file);
       }
       throw new NoSuchElementException("Dependency file not found");
