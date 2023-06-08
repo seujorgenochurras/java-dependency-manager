@@ -97,11 +97,8 @@ public class GradleBuildFile implements DependencyManagerFile {
 
    private DependencyDeclaration getDeclarationOfDependency(Dependency dependency) {
       return this.dependencies.stream()
-              .filter(dependencyDeclaration -> {
-                 System.out.println("\n\nAS" +dependencyDeclaration.toDependencyObject());
-                 System.out.println("\nAWQIOSAOIJ\n\n"+ dependency);
-                 return dependencyDeclaration.toDependencyObject().equals(dependency);
-              })
+              .filter(dependencyDeclaration ->
+                  dependencyDeclaration.toDependencyObject().equals(dependency))
               .findFirst()
               .orElseThrow(() ->
                       new DependencyNotFoundException("Dependency " + dependency.getArtifact() + " not found"));

@@ -6,12 +6,13 @@ plugins {
 
 
 val group = "io.github.seujorgenochurras"
-val versionNum = "0.3.1"
+val versionNum = "0.4.1"
 repositories {
     mavenCentral()
 }
 
 dependencies{
+//implementation ("awiodjaw:ajwodijawoda:1.1.1.1")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
     testImplementation  ("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.8.1")

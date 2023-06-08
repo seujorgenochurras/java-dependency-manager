@@ -11,7 +11,7 @@ import java.io.File;
 
 public class Example {
    public static void main(String[] args)  {
-     DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("dependency-file-example/pom.xml"));
+     DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("dependency-file-example/build.gradle"));
 
      Dependency dependency = DependencyBuilder.startBuild()
              .group("awiodjaw")
