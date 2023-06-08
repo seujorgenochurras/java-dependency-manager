@@ -2,7 +2,7 @@ package io.github.seujorgenochurras.mapper.gradlew;
 
 import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
-import io.github.seujorgenochurras.domain.manager.GradleBuildFileBuilder;
+import io.github.seujorgenochurras.domain.manager.gradlew.GradleBuildFileBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
 import io.github.seujorgenochurras.utils.FileUtils;
@@ -16,6 +16,9 @@ import java.util.regex.Matcher;
 import static io.github.seujorgenochurras.utils.StringUtils.*;
 
 public class GradleMapper extends DependencyMapper {
+
+   private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
+   private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
    protected String gradleBuildFileAsString;
 
    public GradleMapper(File rootFile) {
@@ -72,9 +75,8 @@ public class GradleMapper extends DependencyMapper {
          Matcher dependencyDeclarationMatcher = generateStringMatcherFromRegex(line, dependencyDeclarationRegex);
 
          getAllMatchesOfMatcher(dependencyDeclarationMatcher)
-                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) -> {
-                    dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber));
-                 });
+                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) ->
+                         dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber)));
       });
       return dependenciesAsString;
    }

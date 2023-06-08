@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.domain.manager;
+package io.github.seujorgenochurras.domain.manager.gradlew;
 
 import io.github.seujorgenochurras.domain.AbstractPlugin;
 import io.github.seujorgenochurras.domain.PluginDeclaration;
@@ -18,9 +18,12 @@ import static io.github.seujorgenochurras.utils.StringUtils.getIndexOfStringWith
 
 public class GradleBuildFile implements DependencyManagerFile {
 
-   //TODO learn about tres and change this to a tree
+   //TODO learn about trees and change this to a tree
    private List<DependencyDeclaration> dependencies;
    private List<PluginDeclaration> plugins;
+
+   //TODO learn more about transformers and build a fucking Bumblebee
+   //Just kidding, transformers are used to transform file contents
    private File originFile;
    private String originFileAsString;
 
@@ -87,7 +90,7 @@ public class GradleBuildFile implements DependencyManagerFile {
 
    @Override
    public void removeDependency(Dependency dependency) {
-      commentDependency(dependency); //TODO fucking find a way to do this *without coding like monkey*
+      commentDependency(dependency); //TODO find a way to do this *without coding like monkey*
       //DUDE IS THAT BANANA?
    }
 
