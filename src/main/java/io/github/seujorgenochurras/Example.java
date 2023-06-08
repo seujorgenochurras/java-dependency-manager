@@ -3,12 +3,16 @@ package io.github.seujorgenochurras;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.domain.dependency.DependencyType;
-import io.github.seujorgenochurras.manager.DependencyManager;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
+import io.github.seujorgenochurras.mapper.DependencyMapper;
+
+import java.io.File;
 
 
 public class Example {
    public static void main(String[] args)  {
-     DependencyManagerFile dependencyManagerFile = DependencyManager.dependencyManagerFile;
+     DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("dependency-file-example/build.gradle"));
+
      Dependency dependency = DependencyBuilder.startBuild()
              .group("awiodjaw")
              .artifact("ajwodijawoda")

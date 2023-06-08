@@ -30,14 +30,14 @@ public class DependencyManager {
 
 
    public static DependencyManagerFile getDependencyManagerFile() {
-      return getDependencyManagerFile("../../");
+      return getDependencyManagerFile(System.getProperty("user.dir"));
    }
 
    private static File getDependencyManagerAsFile(String path) {
       return FileSearcher
               .searchForFileIn("build.gradle", path)
               .ifNotFoundSearchFor("build.gradle.kts")
-              .ifNotFoundSearchFor("maven.pom")
+              .ifNotFoundSearchFor("pom.xml")
               .ifNotFoundThrow(() -> new DependencyFileNotFoundException("No dependency manager file found"))
               .getSearchResult();
    }

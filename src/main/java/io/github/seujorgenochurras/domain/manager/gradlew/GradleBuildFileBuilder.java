@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.domain.manager;
+package io.github.seujorgenochurras.domain.manager.gradlew;
 
 import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
